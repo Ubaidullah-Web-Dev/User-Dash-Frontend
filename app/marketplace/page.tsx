@@ -22,6 +22,7 @@ interface Product {
     category: { name: string };
     images: string[];
     isOutOfStock: boolean;
+    unit?: string;
 }
 
 function ProductGrid() {
@@ -75,7 +76,7 @@ function ProductGrid() {
                     </h1>
                     <p className="text-muted-foreground font-medium">{products.length} premium items found</p>
                 </div>
-                <div className="flex items-center space-x-3 bg-secondary/50 p-1.5 rounded-2xl border border-border backdrop-blur-sm">
+                {/* <div className="flex items-center space-x-3 bg-secondary/50 p-1.5 rounded-2xl border border-border backdrop-blur-sm">
                     <Button variant="ghost" size="icon" className="h-10 w-10 text-primary bg-primary/10 rounded-xl">
                         <Grid className="h-5 w-5" />
                     </Button>
@@ -87,7 +88,7 @@ function ProductGrid() {
                         <Filter className="mr-2 h-4 w-4" />
                         Filter
                     </Button>
-                </div>
+                </div> */}
             </div>
 
             {/* Grid */}
@@ -142,7 +143,14 @@ function ProductGrid() {
                                     </div>
                                     <p className="text-muted-foreground text-sm line-clamp-2 flex-1 font-medium">{product.description}</p>
                                     <div className={`pt-4 flex justify-between items-center border-t border-border mt-auto ${product.isOutOfStock ? 'opacity-50 grayscale' : ''}`}>
-                                        <span className="text-2xl font-black text-foreground">${parseFloat(product.price).toLocaleString()}</span>
+                                        <div className="flex items-center flex-wrap gap-2">
+                                            <span className="text-2xl font-black text-foreground">${parseFloat(product.price).toLocaleString()}</span>
+                                            {product.unit && (
+                                                <Badge variant="outline" className="text-[9px] font-black px-2 py-0.5 rounded-lg border-border text-muted-foreground bg-secondary/30 uppercase tracking-tighter">
+                                                    {product.unit}
+                                                </Badge>
+                                            )}
+                                        </div>
                                         <div className="h-8 w-8 rounded-full border border-border flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/10 transition-all font-black text-foreground">
                                             {product.isOutOfStock ? '!' : <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />}
                                         </div>

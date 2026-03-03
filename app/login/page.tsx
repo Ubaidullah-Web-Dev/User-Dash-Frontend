@@ -19,6 +19,7 @@ export default function Login() {
     const redirectTo = searchParams.get('redirectTo') || undefined;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
 
@@ -26,7 +27,11 @@ export default function Login() {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await api.post('/login', { email, password });
+            const response = await api.post('/login', {
+                email,
+                password,
+                remember_me: rememberMe
+            });
             toast.success("Welcome back!", {
                 description: "Logging you in safely...",
             });
@@ -85,7 +90,22 @@ export default function Login() {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
-                            <div className="flex justify-end">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        id="remember_me"
+                                        type="checkbox"
+                                        className="h-4 w-4 rounded border-border bg-background text-primary focus:ring-primary cursor-pointer"
+                                        checked={rememberMe}
+                                        onChange={(e) => setRememberMe(e.target.checked)}
+                                    />
+                                    <label
+                                        htmlFor="remember_me"
+                                        className="text-sm font-medium text-gray-500 dark:text-gray-400 cursor-pointer select-none"
+                                    >
+                                        Remember me
+                                    </label>
+                                </div>
                                 <Link
                                     href="/forgot-password"
                                     className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"

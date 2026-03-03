@@ -35,6 +35,7 @@ interface Product {
     seller: { name: string };
     images: string[];
     isOutOfStock: boolean;
+    unit?: string;
 }
 
 export default function ProductDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -189,8 +190,13 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
                     </div>
 
                     <div className="mb-10 p-10 rounded-4xl bg-card border border-border shadow-sm">
-                        <div className="flex items-end space-x-4 mb-8">
+                        <div className="flex items-end flex-wrap gap-4 mb-8">
                             <span className="text-5xl font-black text-foreground">${parseFloat(product.price).toLocaleString()}</span>
+                            {product.unit && (
+                                <Badge variant="secondary" className="mb-1 bg-secondary border-border text-muted-foreground font-black px-4 py-1.5 rounded-xl uppercase tracking-widest text-[10px]">
+                                    PER {product.unit}
+                                </Badge>
+                            )}
                             <span className="text-muted-foreground text-xl font-bold line-through mb-1 opacity-50">${(parseFloat(product.price) * 1.2).toFixed(2)}</span>
                         </div>
 
@@ -219,7 +225,7 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
                             <span className={`font-bold text-sm uppercase tracking-widest ${product.isOutOfStock || (product.stock - inCartQuantity) <= 0 ? 'text-red-500 font-black italic' : 'text-muted-foreground'}`}>
                                 {product.isOutOfStock ? 'Currently Unavailable' :
                                     (product.stock - inCartQuantity) <= 0 ? 'All units in your cart' :
-                                        `${product.stock - inCartQuantity} units available to add`}
+                                        `${product.stock - inCartQuantity} left in stock`}
                             </span>
                         </div>
 

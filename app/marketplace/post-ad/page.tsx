@@ -23,6 +23,7 @@ export default function PostAdPage() {
         description: '',
         price: '',
         stock: '1',
+        unit: '',
         category_id: '',
         images: [''],
     });
@@ -79,6 +80,7 @@ export default function PostAdPage() {
                 price: parseFloat(formData.price).toString(),
                 stock: parseInt(formData.stock),
                 category_id: parseInt(formData.category_id),
+                unit: formData.unit.trim(),
             });
             toast.success("Ad Published!", { description: "Your product is now live on the marketplace." });
             router.push('/marketplace');
@@ -163,7 +165,6 @@ export default function PostAdPage() {
                                 </div>
                             </div>
 
-                            {/* Stock */}
                             <div className="space-y-3">
                                 <Label htmlFor="stock" className="text-muted-foreground font-bold uppercase text-xs tracking-widest pl-1">Available Stock</Label>
                                 <Input
@@ -174,6 +175,18 @@ export default function PostAdPage() {
                                     value={formData.stock}
                                     onChange={handleChange}
                                     required
+                                />
+                            </div>
+
+                            <div className="space-y-3">
+                                <Label htmlFor="unit" className="text-muted-foreground font-bold uppercase text-xs tracking-widest pl-1">Unit (e.g. kg, gram, pcs)</Label>
+                                <Input
+                                    id="unit"
+                                    name="unit"
+                                    placeholder="Enter unit name"
+                                    className="h-14 bg-secondary/50 border-border rounded-2xl px-6"
+                                    value={formData.unit}
+                                    onChange={handleChange}
                                 />
                             </div>
                         </div>
