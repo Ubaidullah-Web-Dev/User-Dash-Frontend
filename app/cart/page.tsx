@@ -195,9 +195,11 @@ export default function CartPage() {
                                     </div>
                                 </div>
 
-                                <Button className="w-full h-16 bg-primary text-primary-foreground hover:opacity-90 rounded-2xl font-black text-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
-                                    CHECKOUT <CreditCard className="ml-3 h-6 w-6" />
-                                </Button>
+                                <Link href="/checkout/address">
+                                    <Button className="w-full h-16 bg-primary text-primary-foreground hover:opacity-90 rounded-2xl font-black text-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
+                                        CHECKOUT <CreditCard className="ml-3 h-6 w-6" />
+                                    </Button>
+                                </Link>
 
                                 <div className="space-y-4">
                                     <div className="flex items-center text-[10px] font-black uppercase text-muted-foreground bg-secondary/50 p-4 rounded-xl border border-border">

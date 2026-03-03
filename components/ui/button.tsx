@@ -11,12 +11,12 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant = 'primary', size = 'md', isLoading, children, disabled, ...props }, ref) => {
         const variants = {
-            primary: 'bg-cyan-600 text-white hover:bg-cyan-500 shadow-lg shadow-cyan-500/20',
-            secondary: 'bg-gray-700 text-white hover:bg-gray-600',
-            outline: 'border-2 border-gray-700 bg-transparent hover:bg-gray-800 text-white',
-            ghost: 'bg-transparent hover:bg-gray-800 text-gray-400 hover:text-white',
-            danger: 'bg-red-600 text-white hover:bg-red-500',
-            link: 'text-cyan-400 underline-offset-4 hover:underline bg-transparent !h-auto !p-0',
+            primary: 'bg-primary text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/20',
+            secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+            outline: 'border-2 border-border bg-transparent hover:bg-accent hover:text-accent-foreground',
+            ghost: 'bg-transparent hover:bg-accent hover:text-accent-foreground text-muted-foreground',
+            danger: 'bg-red-600 text-white hover:bg-red-500', // Danger usually stays consistent
+            link: 'text-primary underline-offset-4 hover:underline bg-transparent !h-auto !p-0',
         };
 
         const sizes = {
