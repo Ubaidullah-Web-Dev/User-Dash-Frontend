@@ -1,0 +1,39 @@
+
+> frontend@0.1.0 lint
+> eslint
+
+
+/home/ubaid/Public/User-dash/frontend/app/admin/layout.tsx
+  17:5  warning  'ShoppingBag' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubaid/Public/User-dash/frontend/app/admin/products/page.tsx
+   6:5  warning  'Table' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   7:5  warning  'TableBody' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+   8:5  warning  'TableCell' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+   9:5  warning  'TableHead' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  10:5  warning  'TableHeader' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+  11:5  warning  'TableRow' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+  20:5  warning  'MoreHorizontal' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+  22:5  warning  'Loader2' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+  24:5  warning  'XCircle' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+  88:8  warning  React Hook useEffect has a missing dependency: 'fetchProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/home/ubaid/Public/User-dash/frontend/app/admin/settings/page.tsx
+  6:10  warning  'Button' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubaid/Public/User-dash/frontend/app/admin/users/page.tsx
+   6:5   warning  'Table' is defined but never used        @typescript-eslint/no-unused-vars
+   7:5   warning  'TableBody' is defined but never used    @typescript-eslint/no-unused-vars
+   8:5   warning  'TableCell' is defined but never used    @typescript-eslint/no-unused-vars
+   9:5   warning  'TableHead' is defined but never used    @typescript-eslint/no-unused-vars
+  10:5   warning  'TableHeader' is defined but never used  @typescript-eslint/no-unused-vars
+  11:5   warning  'TableRow' is defined but never used     @typescript-eslint/no-unused-vars
+  34:22  warning  'error' is defined but never used        @typescript-eslint/no-unused-vars
+
+/home/ubaid/Public/User-dash/frontend/app/cart/page.tsx
+  47:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  63:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  73:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 22 problems (0 errors, 22 warnings)
+

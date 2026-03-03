@@ -5,115 +5,121 @@ import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
+interface DashboardStats {
+    total_products: number;
+    total_users: number;
+}
+
+interface DashboardData {
+    stats: DashboardStats;
+}
+
 export default function AdminDashboard() {
-    const { user, logout, loading, isAuthenticated } = useAuth();
-    const [adminData, setAdminData] = useState<any>(null);
-    const [fetchError, setFetchError] = useState('');
+    const { user, loading, isAuthenticated } = useAuth();
+    const [adminData, setAdminData] = useState<DashboardData | null>(null);
     const router = useRouter();
 
     useEffect(() => {
-        if (!loading && !isAuthenticated) {
-            router.push('/login');
+        if (!loading) {
+            if (!isAuthenticated) {
+                router.push('/login');
+            } else if (!user?.roles?.includes('ROLE_ADMIN') && !user?.roles?.includes('ROLE_SUPER_ADMIN')) {
+                router.push('/marketplace');
+            }
         }
-    }, [loading, isAuthenticated, router]);
+    }, [loading, isAuthenticated, user, router]);
 
     useEffect(() => {
         if (isAuthenticated) {
             api.get('/admin/dashboard')
                 .then(response => setAdminData(response.data))
-                .catch(err => setFetchError('Failed to load admin data'));
+                .catch(err => console.error('Failed to load admin data', err));
         }
     }, [isAuthenticated]);
 
     if (loading || !isAuthenticated) {
-        return <div className="flex min-h-screen items-center justify-center bg-gray-900 text-white text-xl">Loading...</div>;
+        return <div className="flex min-h-screen items-center justify-center bg-background text-foreground text-xl font-black">AUTHENTICATING...</div>;
     }
 
     return (
-        <div className="min-h-screen bg-gray-900 text-gray-100">
-            {/* Sidebar/Header Navigation (Simplified) */}
-            <nav className="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                    Admin Panel
-                </h1>
-                <div className="flex items-center space-x-4">
-                    <span className="text-sm text-gray-400">Welcome, {user?.email}</span>
-                    <button
-                        onClick={logout}
-                        className="bg-red-600 hover:bg-red-500 text-white text-sm px-4 py-2 rounded-lg transition-colors"
-                    >
-                        Logout
-                    </button>
-                </div>
-            </nav>
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div>
+                <h1 className="text-4xl font-black text-foreground tracking-tighter mb-2">ADMIN <span className="text-primary">DASHBOARD</span></h1>
+                <p className="text-muted-foreground font-medium">Overview of your marketplace ecosystem.</p>
+            </div>
 
-            <main className="p-8 max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    {/* Stats Cards */}
-                    {[
-                        { label: 'Total Sales', value: '$12,450', color: 'from-green-400 to-emerald-600' },
-                        { label: 'New Customers', value: '48', color: 'from-blue-400 to-indigo-600' },
-                        { label: 'Pending Orders', value: '12', color: 'from-amber-400 to-orange-600' }
-                    ].map((stat, i) => (stat &&
-                        <div key={i} className="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-xl">
-                            <p className="text-gray-400 text-sm mb-1">{stat.label}</p>
-                            <h3 className={`text-3xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                    { label: 'Total Products', value: adminData?.stats?.total_products || '0', color: 'from-primary to-blue-600', icon: '📦' },
+                    { label: 'Active Users', value: adminData?.stats?.total_users || '0', color: 'from-purple-500 to-pink-600', icon: '👥' },
+                    { label: 'Total Sales', value: '$0', color: 'from-emerald-500 to-teal-600', icon: '💰' },
+                    { label: 'Pending', value: '0', color: 'from-amber-500 to-orange-600', icon: '⏳' }
+                ].map((stat, i) => (
+                    <Card key={i} className="bg-card border-border p-8 rounded-3xl relative overflow-hidden group hover:border-primary/30 transition-all shadow-sm hover:shadow-md">
+                        <div className="relative z-10">
+                            <p className="text-muted-foreground text-xs font-black uppercase tracking-widest mb-4">{stat.label}</p>
+                            <h3 className={`text-4xl font-black bg-linear-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
                                 {stat.value}
                             </h3>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700 shadow-2xl">
-                    <h2 className="text-xl font-semibold mb-6">System Status</h2>
-                    {adminData ? (
-                        <div className="space-y-4">
-                            <div className="p-4 bg-gray-700/50 rounded-lg">
-                                <p className="text-cyan-400 font-mono text-sm leading-relaxed whitespace-pre-wrap">
-                                    {JSON.stringify(adminData, null, 2)}
-                                </p>
-                            </div>
-                            <div className="flex items-center text-green-400 text-sm">
-                                <span className="flex h-2 w-2 rounded-full bg-green-400 mr-2 animate-pulse"></span>
-                                Backend API Connection: Active
+                            <div className="text-2xl mt-4 opacity-20 group-hover:opacity-100 transition-opacity absolute top-0 right-0">
+                                {stat.icon}
                             </div>
                         </div>
-                    ) : (
-                        <div className="text-gray-500 animate-pulse">
-                            {fetchError || 'Fetching secure data...'}
-                        </div>
-                    )}
-                </div>
+                        <div className={`absolute -right-4 -bottom-4 w-24 h-24 bg-linear-to-br ${stat.color} opacity-5 blur-3xl`} />
+                    </Card>
+                ))}
+            </div>
 
-                <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
-                        <h3 className="text-lg font-medium mb-4">Quick Actions</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                            <button className="p-4 bg-gray-700 hover:bg-gray-600 rounded-xl text-center transition-all">
-                                <span className="block text-2xl mb-1">📦</span>
-                                Add Product
-                            </button>
-                            <button className="p-4 bg-gray-700 hover:bg-gray-600 rounded-xl text-center transition-all">
-                                <span className="block text-2xl mb-1">👥</span>
-                                View Users
-                            </button>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <Card className="lg:col-span-2 bg-card border-border rounded-3xl p-10 shadow-sm">
+                    <h3 className="text-2xl font-black text-foreground mb-8">Recent Activity</h3>
+                    <div className="space-y-6">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="flex items-center gap-6 p-4 rounded-2xl hover:bg-secondary/50 transition-all cursor-pointer border border-transparent hover:border-border">
+                                <div className="h-12 w-12 rounded-xl bg-secondary flex items-center justify-center font-bold">
+                                    {i === 1 ? '🛒' : i === 2 ? '👤' : '📦'}
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-sm font-bold text-foreground">{i === 1 ? 'New sale: MacBook Pro M3' : i === 2 ? 'New user registered: sarah@example.com' : 'Stock low: iPhone 15 Pro'}</p>
+                                    <p className="text-xs text-muted-foreground font-medium">2 hours ago</p>
+                                </div>
+                                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+                <Card className="bg-card border-border rounded-3xl p-10 shadow-sm">
+                    <h3 className="text-2xl font-black text-foreground mb-8">System Health</h3>
+                    <div className="space-y-8">
+                        <div>
+                            <div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3">
+                                <span className="text-muted-foreground">Server Load</span>
+                                <span className="text-emerald-500">Optimal</span>
+                            </div>
+                            <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+                                <div className="h-full w-[24%] bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+                            </div>
+                        </div>
+                        <div>
+                            <div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3">
+                                <span className="text-muted-foreground">API Latency</span>
+                                <span className="text-primary font-bold">12ms</span>
+                            </div>
+                            <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+                                <div className="h-full w-[12%] bg-primary rounded-full shadow-[0_0_8px_rgba(14,165,233,0.3)]" />
+                            </div>
                         </div>
                     </div>
-                    <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
-                        <h3 className="text-lg font-medium mb-4">Security Insights</h3>
-                        <ul className="space-y-3">
-                            <li className="flex justify-between text-sm">
-                                <span className="text-gray-400">Auth Method</span>
-                                <span className="text-cyan-400">JWT stateless</span>
-                            </li>
-                            <li className="flex justify-between text-sm">
-                                <span className="text-gray-400">Current Role</span>
-                                <span className="text-cyan-400">{user?.roles.join(', ')}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </main>
+                    <Button variant="outline" className="w-full mt-10 border-border rounded-xl h-12 font-bold hover:bg-secondary transition-all">
+                        View System Logs
+                    </Button>
+                </Card>
+            </div>
         </div>
     );
 }
+
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ChevronRight } from 'lucide-react';

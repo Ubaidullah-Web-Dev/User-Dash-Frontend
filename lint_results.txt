@@ -1,0 +1,143 @@
+
+> frontend@0.1.0 lint
+> eslint
+
+
+/home/ubaid/Public/User-dash/frontend/app/admin/dashboard/page.tsx
+   9:19  warning  'logout' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  10:48  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  11:12  warning  'fetchError' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  28:24  warning  'err' is defined but never used                  @typescript-eslint/no-unused-vars
+
+/home/ubaid/Public/User-dash/frontend/app/admin/layout.tsx
+  17:5  warning  'ShoppingBag' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/ubaid/Public/User-dash/frontend/app/admin/products/page.tsx
+    6:5   warning  'Table' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+    7:5   warning  'TableBody' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+    8:5   warning  'TableCell' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+    9:5   warning  'TableHead' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+   10:5   warning  'TableHeader' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+   11:5   warning  'TableRow' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+   13:52  warning  'CardDescription' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+   19:5   warning  'Edit3' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   21:5   warning  'MoreHorizontal' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+   23:5   warning  'Loader2' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+   25:5   warning  'XCircle' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+   60:22  warning  'error' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   70:27  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+   76:18  warning  'error' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   88:8   warning  React Hook useEffect has a missing dependency: 'fetchProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   97:18  warning  'error' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+  107:18  warning  'error' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+
+/home/ubaid/Public/User-dash/frontend/app/admin/settings/page.tsx
+   6:10  warning  'Button' is defined but never used        @typescript-eslint/no-unused-vars
+   9:10  warning  'Users' is defined but never used         @typescript-eslint/no-unused-vars
+   9:31  warning  'Mail' is defined but never used          @typescript-eslint/no-unused-vars
+   9:37  warning  'ShieldCheck' is defined but never used   @typescript-eslint/no-unused-vars
+   9:50  warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+  28:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  46:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+/home/ubaid/Public/User-dash/frontend/app/admin/users/page.tsx
+   6:5   warning  'Table' is defined but never used        @typescript-eslint/no-unused-vars
+   7:5   warning  'TableBody' is defined but never used    @typescript-eslint/no-unused-vars
+   8:5   warning  'TableCell' is defined but never used    @typescript-eslint/no-unused-vars
+   9:5   warning  'TableHead' is defined but never used    @typescript-eslint/no-unused-vars
+  10:5   warning  'TableHeader' is defined but never used  @typescript-eslint/no-unused-vars
+  11:5   warning  'TableRow' is defined but never used     @typescript-eslint/no-unused-vars
+  34:22  warning  'error' is defined but never used        @typescript-eslint/no-unused-vars
+
+/home/ubaid/Public/User-dash/frontend/app/cart/page.tsx
+    8:16  warning  'CardContent' is defined but never used                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   16:5   warning  'ChevronLeft' is defined but never used                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   17:5   warning  'Loader2' is defined but never used                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   48:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   64:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   74:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  109:93  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  119:49  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  150:49  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  214:27  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/home/ubaid/Public/User-dash/frontend/app/forgot-password/page.tsx
+  33:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  84:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ubaid/Public/User-dash/frontend/app/login/page.tsx
+  28:23  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  97:32  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/ubaid/Public/User-dash/frontend/app/marketplace/[slug]/page.tsx
+    8:16  warning  'CardContent' is defined but never used                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   14:5   warning  'Share2' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+   17:5   warning  'RotateCcw' is defined but never used                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+   53:22  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   75:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  105:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  143:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/ubaid/Public/User-dash/frontend/components/ui/input.tsx
+  4:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+/home/ubaid/Public/User-dash/frontend/context/AuthContext.tsx
+  34:32  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  37:21  error    Error: Cannot access variable before it is declared
+
+`logout` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/home/ubaid/Public/User-dash/frontend/context/AuthContext.tsx:37:21
+  35 |                 // Check if token is expired
+  36 |                 if (decoded.exp * 1000 < Date.now()) {
+> 37 |                     logout();
+     |                     ^^^^^^ `logout` accessed before it is declared
+  38 |                 } else {
+  39 |                     setToken(storedToken);
+  40 |                     setUser({
+
+/home/ubaid/Public/User-dash/frontend/context/AuthContext.tsx:64:5
+  62 |     };
+  63 |
+> 64 |     const logout = () => {
+     |     ^^^^^^^^^^^^^^^^^^^^^^
+> 65 |         localStorage.removeItem('token');
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 66 |         setToken(null);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 67 |         setUser(null);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 68 |         router.push('/login');
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 69 |     };
+     | ^^^^^^^ `logout` is declared here
+  70 |
+  71 |     return (
+  72 |         <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!token, loading }}>  react-hooks/immutability
+  51:8   warning  React Hook useEffect has a missing dependency: 'logout'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+  56:24  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/home/ubaid/Public/User-dash/frontend/context/CartContext.tsx
+  29:53  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-explicit-any
+  31:18  warning  'error' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  37:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/ubaid/Public/User-dash/frontend/context/CartContext.tsx:37:9
+  35 |
+  36 |     useEffect(() => {
+> 37 |         fetchCartCount();
+     |         ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  38 |     }, [isAuthenticated]);
+  39 |
+  40 |     return (  react-hooks/set-state-in-effect
+  38:8   warning  React Hook useEffect has a missing dependency: 'fetchCartCount'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-hooks/exhaustive-deps
+
+✖ 67 problems (15 errors, 52 warnings)
+

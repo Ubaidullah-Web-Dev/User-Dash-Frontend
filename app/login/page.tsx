@@ -3,82 +3,112 @@
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
+import { AxiosError } from 'axios';
 import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { toast } from 'sonner';
+import { Mail, Lock, ArrowRight } from 'lucide-react';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
+        setIsLoading(true);
         try {
             const response = await api.post('/login', { email, password });
+            toast.success("Welcome back!", {
+                description: "Logging you in safely...",
+            });
             login(response.data.token);
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Invalid credentials');
+        } catch (err: unknown) {
+            const axiosError = err as AxiosError<{ message?: string }>;
+            const errorMessage = axiosError.response?.data?.message || 'Invalid credentials';
+            toast.error("Authentication failed", {
+                description: errorMessage,
+            });
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-900 px-4">
-            <div className="w-full max-w-md space-y-8 rounded-2xl bg-gray-800 p-8 shadow-2xl transition-all hover:shadow-cyan-500/20">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
-                        Sign in to Admin
-                    </h2>
-                    <p className="mt-2 text-center text-sm text-gray-400">
-                        Enter your credentials to access the panel
-                    </p>
-                </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="space-y-4 rounded-md shadow-sm">
-                        <div>
-                            <input
-                                type="email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="relative block w-full rounded-lg border-0 bg-gray-700 p-3 text-white placeholder-gray-400 ring-1 ring-inset ring-gray-600 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-cyan-500 sm:text-sm"
-                                placeholder="Email address"
-                            />
-                        </div>
-                        <div>
-                            <input
-                                type="password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="relative block w-full rounded-lg border-0 bg-gray-700 p-3 text-white placeholder-gray-400 ring-1 ring-inset ring-gray-600 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-cyan-500 sm:text-sm"
-                                placeholder="Password"
-                            />
-                        </div>
-                    </div>
-
-                    {error && (
-                        <div className="rounded-md bg-red-900/50 p-3 text-sm text-red-400">
-                            {error}
-                        </div>
-                    )}
-
-                    <div>
-                        <button
-                            type="submit"
-                            className="group relative flex w-full justify-center rounded-lg bg-cyan-600 px-3 py-3 text-sm font-semibold text-white hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600 transition-all active:scale-95"
-                        >
-                            Sign in
-                        </button>
-                    </div>
-
-                    <div className="text-center text-sm">
-                        <Link href="/register" className="font-medium text-cyan-400 hover:text-cyan-300">
-                            Don't have an account? Register now
-                        </Link>
-                    </div>
-                </form>
+        <div className="flex min-h-screen items-center justify-center bg-background px-4 relative overflow-hidden transition-colors duration-500">
+            <div className="absolute top-6 right-6 z-50">
+                <ThemeToggle />
             </div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 blur-[150px] rounded-full pointer-events-none"></div>
+
+            <Card className="w-full max-w-md border-border bg-card shadow-2xl shadow-primary/5 relative z-10">
+                <CardHeader className="space-y-1 pb-8 text-center border-b border-border/50 mb-6">
+                    <CardTitle className="text-3xl font-black tracking-tight text-foreground">
+                        Sign In
+                    </CardTitle>
+                    <CardDescription className="text-gray-500 dark:text-gray-400 text-base">
+                        Access your administrative dashboard
+                    </CardDescription>
+                </CardHeader>
+                <form onSubmit={handleSubmit}>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <div className="relative">
+                                <Mail className="absolute left-3.5 top-3 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                <Input
+                                    type="email"
+                                    placeholder="Email Address"
+                                    className="pl-11"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <div className="relative">
+                                <Lock className="absolute left-3.5 top-3 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                <Input
+                                    type="password"
+                                    placeholder="Password"
+                                    className="pl-11"
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex justify-end">
+                                <Link
+                                    href="/forgot-password"
+                                    className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
+                                >
+                                    Forgot password?
+                                </Link>
+                            </div>
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex flex-col gap-4">
+                        <Button
+                            className="w-full h-12 text-base rounded-2xl group"
+                            isLoading={isLoading}
+                            type="submit"
+                        >
+                            Sign In
+                            {!isLoading && <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />}
+                        </Button>
+                        <p className="text-center text-sm text-gray-400 dark:text-gray-500">
+                            Don&apos;t have an account?{' '}
+                            <Link href="/register" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
+                                Register now
+                            </Link>
+                        </p>
+                    </CardFooter>
+                </form>
+            </Card>
         </div>
     );
 }

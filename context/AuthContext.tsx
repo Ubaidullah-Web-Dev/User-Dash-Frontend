@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
+import { useCallback } from 'react';
 
 interface User {
     email: string;
@@ -19,6 +20,13 @@ interface AuthContextType {
     loading: boolean;
 }
 
+interface JWTPayload {
+    email?: string;
+    username?: string;
+    roles?: string[];
+    exp: number;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -27,46 +35,51 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            try {
-                const decoded: any = jwtDecode(storedToken);
-                // Check if token is expired
-                if (decoded.exp * 1000 < Date.now()) {
-                    logout();
-                } else {
-                    setToken(storedToken);
-                    setUser({
-                        email: decoded.email || decoded.username,
-                        roles: decoded.roles || [],
-                    });
-                }
-            } catch (error) {
-                console.error('Failed to decode token:', error);
-                logout();
-            }
-        }
-        setLoading(false);
-    }, []);
-
-    const login = (newToken: string) => {
-        localStorage.setItem('token', newToken);
-        setToken(newToken);
-        const decoded: any = jwtDecode(newToken);
-        setUser({
-            email: decoded.email || decoded.username,
-            roles: decoded.roles || [],
-        });
-        router.push('/admin/dashboard');
-    };
-
-    const logout = () => {
+    const logout = useCallback(() => {
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);
         router.push('/login');
-    };
+    }, [router]);
+
+    useEffect(() => {
+        const checkToken = () => {
+            const storedToken = localStorage.getItem('token');
+            if (storedToken) {
+                try {
+                    const decoded = jwtDecode<JWTPayload>(storedToken);
+                    // Check if token is expired
+                    if (decoded.exp * 1000 < Date.now()) {
+                        logout();
+                    } else {
+                        setToken(storedToken);
+                        setUser({
+                            email: decoded.email || decoded.username || '',
+                            roles: decoded.roles || [],
+                        });
+                    }
+                } catch (error) {
+                    console.error('Failed to decode token:', error);
+                    logout();
+                }
+            }
+            setLoading(false);
+        };
+
+        const timeout = setTimeout(checkToken, 0);
+        return () => clearTimeout(timeout);
+    }, [logout]);
+
+    const login = useCallback((newToken: string) => {
+        localStorage.setItem('token', newToken);
+        setToken(newToken);
+        const decoded = jwtDecode<JWTPayload>(newToken);
+        setUser({
+            email: decoded.email || decoded.username || '',
+            roles: decoded.roles || [],
+        });
+        router.push('/admin/dashboard');
+    }, [router]);
 
     return (
         <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!token, loading }}>
