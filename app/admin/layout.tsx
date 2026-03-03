@@ -14,7 +14,8 @@ import {
     X,
     ChevronRight,
     Search,
-    PlusCircle
+    PlusCircle,
+    ShoppingCart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -47,12 +48,13 @@ export default function AdminLayout({
         { label: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
         { label: 'Products', icon: Package, href: '/admin/products' },
         { label: 'Users', icon: Users, href: '/admin/users' },
+        { label: 'Vendors', icon: Users, href: '/admin/vendors' },
+        { label: 'Supply Orders', icon: ShoppingCart, href: '/admin/vendor-orders' },
         { label: 'Settings', icon: Settings, href: '/admin/settings' },
     ];
 
     return (
         <div className="min-h-screen bg-background text-foreground flex overflow-hidden">
-            {/* Sidebar */}
             <aside
                 className={`fixed inset-y-0 left-0 z-50 w-72 bg-secondary/50 dark:bg-gray-900/80 border-r border-border backdrop-blur-xl transition-transform duration-300 ease-in-out lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
             >
@@ -103,8 +105,6 @@ export default function AdminLayout({
                     </div>
                 </div>
             </aside>
-
-            {/* Main Content */}
             <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'lg:pl-72' : ''}`}>
                 <header className="h-20 border-b border-border bg-background/60 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-40">
                     <button onClick={() => setIsSidebarOpen(true)} className={`lg:hidden p-2 text-muted-foreground hover:text-foreground ${isSidebarOpen ? 'hidden' : ''}`}>

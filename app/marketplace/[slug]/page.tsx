@@ -34,6 +34,7 @@ interface Product {
     category: { name: string };
     seller: { name: string };
     images: string[];
+    isOutOfStock: boolean;
 }
 
 export default function ProductDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -42,24 +43,35 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
     const [loading, setLoading] = useState(true);
     const [activeImage, setActiveImage] = useState(0);
     const [quantity, setQuantity] = useState(1);
+    const [inCartQuantity, setInCartQuantity] = useState(0);
     const [addingToCart, setAddingToCart] = useState(false);
     const { fetchCartCount } = useCart();
     const router = useRouter();
 
     useEffect(() => {
-        const fetchProduct = async () => {
+        const fetchData = async () => {
             try {
-                const response = await api.get(`/products/${slug}`);
-                setProduct(response.data);
+                const [productRes, cartRes] = await Promise.all([
+                    api.get(`/products/${slug}`),
+                    api.get('/cart').catch(() => ({ data: [] })) // Handle non-auth gracefully
+                ]);
+
+                const productData = productRes.data;
+                setProduct(productData);
+
+                // Calculate how many of this product are already in cart
+                const cartItems = cartRes.data;
+                const existingItem = cartItems.find((item: any) => item.productId === productData.id && !item.isSavedForLater);
+                setInCartQuantity(existingItem ? existingItem.quantity : 0);
             } catch (err: unknown) {
-                console.error('Failed to fetch product', err);
+                console.error('Failed to fetch data', err);
                 toast.error("Product not found");
                 router.push('/marketplace');
             } finally {
                 setLoading(false);
             }
         };
-        fetchProduct();
+        fetchData();
     }, [slug, router]);
 
     const handleAddToCart = async (isSavedForLater = false) => {
@@ -73,11 +85,21 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
             toast.success(isSavedForLater ? "Saved for later" : "Added to cart", {
                 description: `${product?.name} has been updated in your cart.`
             });
+            if (!isSavedForLater) {
+                setInCartQuantity(prev => prev + quantity);
+                setQuantity(1); // Reset quantity to 1
+            }
             fetchCartCount();
-        } catch (err: unknown) {
+        } catch (err: any) {
             console.error(err);
-            toast.error("Action failed", { description: "Please login to manage your cart." });
-            router.push('/login');
+            if (err.response?.status === 401) {
+                toast.error("Authentication required", { description: "Please login to manage your cart." });
+                router.push(`/login?redirectTo=${encodeURIComponent(window.location.pathname)}`);
+            } else {
+                toast.error("Action failed", {
+                    description: err.response?.data?.message || "An unexpected error occurred."
+                });
+            }
         } finally {
             setAddingToCart(false);
         }
@@ -134,6 +156,11 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
                         <Badge className="absolute top-8 left-8 bg-background/80 backdrop-blur-md text-primary border-primary/20 px-4 py-2 text-sm font-black uppercase tracking-wider">
                             {product.category.name}
                         </Badge>
+                        {product.isOutOfStock && (
+                            <Badge className="absolute top-8 right-8 bg-red-500 text-white font-black border-none px-6 py-3 text-lg shadow-2xl">
+                                OUT OF STOCK
+                            </Badge>
+                        )}
                     </Card>
 
                     {/* Thumbnails */}
@@ -172,32 +199,38 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-10 w-10 text-muted-foreground hover:text-foreground"
+                                    className="h-10 w-10 text-muted-foreground hover:text-foreground disabled:opacity-30"
                                     onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                                    disabled={product.isOutOfStock}
                                 >
                                     <Minus className="h-4 w-4" />
                                 </Button>
-                                <span className="w-12 text-center font-black text-foreground">{quantity}</span>
+                                <span className={`w-12 text-center font-black text-foreground ${product.isOutOfStock ? 'opacity-30' : ''}`}>{quantity}</span>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-10 w-10 text-muted-foreground hover:text-foreground"
-                                    onClick={() => setQuantity(q => q + 1)}
+                                    className="h-10 w-10 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                                    onClick={() => setQuantity(q => Math.min(product.stock - inCartQuantity, q + 1))}
+                                    disabled={product.isOutOfStock || quantity >= (product.stock - inCartQuantity)}
                                 >
                                     <Plus className="h-4 w-4" />
                                 </Button>
                             </div>
-                            <span className="text-muted-foreground font-bold text-sm uppercase tracking-widest">{product.stock} units in stock</span>
+                            <span className={`font-bold text-sm uppercase tracking-widest ${product.isOutOfStock || (product.stock - inCartQuantity) <= 0 ? 'text-red-500 font-black italic' : 'text-muted-foreground'}`}>
+                                {product.isOutOfStock ? 'Currently Unavailable' :
+                                    (product.stock - inCartQuantity) <= 0 ? 'All units in your cart' :
+                                        `${product.stock - inCartQuantity} units available to add`}
+                            </span>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <Button
-                                className="h-16 bg-primary hover:opacity-90 rounded-2xl text-lg font-black text-primary-foreground shadow-xl shadow-primary/20 transition-all active:scale-95"
+                                className="h-16 bg-primary hover:opacity-90 rounded-2xl text-lg font-black text-primary-foreground shadow-xl shadow-primary/20 transition-all active:scale-95 disabled:bg-muted disabled:text-muted-foreground disabled:opacity-50 disabled:shadow-none"
                                 onClick={() => handleAddToCart(false)}
-                                disabled={addingToCart}
+                                disabled={addingToCart || product.isOutOfStock}
                             >
-                                {addingToCart ? <Loader2 className="animate-spin mr-2" /> : <ShoppingCart className="mr-3" />}
-                                ADD TO CART
+                                {addingToCart ? <Loader2 className="animate-spin mr-2" /> : (product.isOutOfStock ? <Plus className="mr-3 rotate-45" /> : <ShoppingCart className="mr-3" />)}
+                                {product.isOutOfStock ? "STRICTLY OUT OF STOCK" : "ADD TO CART"}
                             </Button>
                             <Button
                                 variant="outline"

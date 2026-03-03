@@ -21,6 +21,7 @@ interface Product {
     isActive: boolean;
     category: { name: string };
     images: string[];
+    isOutOfStock: boolean;
 }
 
 function ProductGrid() {
@@ -115,6 +116,11 @@ function ProductGrid() {
                                             FEATURED
                                         </Badge>
                                     )}
+                                    {product.isOutOfStock && (
+                                        <Badge className="absolute top-4 right-4 bg-red-500 text-white font-black border-none px-3 py-1 shadow-xl">
+                                            OUT OF STOCK
+                                        </Badge>
+                                    )}
                                     <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
                                         <Button className="w-full bg-primary/90 hover:bg-primary text-primary-foreground rounded-xl backdrop-blur-md border border-primary/20 font-bold">
                                             Quick View
@@ -135,10 +141,10 @@ function ProductGrid() {
                                         </div>
                                     </div>
                                     <p className="text-muted-foreground text-sm line-clamp-2 flex-1 font-medium">{product.description}</p>
-                                    <div className="pt-4 flex justify-between items-center border-t border-border mt-auto">
+                                    <div className={`pt-4 flex justify-between items-center border-t border-border mt-auto ${product.isOutOfStock ? 'opacity-50 grayscale' : ''}`}>
                                         <span className="text-2xl font-black text-foreground">${parseFloat(product.price).toLocaleString()}</span>
-                                        <div className="h-8 w-8 rounded-full border border-border flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/10 transition-all">
-                                            <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                                        <div className="h-8 w-8 rounded-full border border-border flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/10 transition-all font-black text-foreground">
+                                            {product.isOutOfStock ? '!' : <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />}
                                         </div>
                                     </div>
                                 </div>

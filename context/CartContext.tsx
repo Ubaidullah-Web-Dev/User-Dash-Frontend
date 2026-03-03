@@ -11,6 +11,7 @@ interface CartContextType {
 
 interface CartItem {
     id: number;
+    quantity: number;
     isSavedForLater: boolean;
 }
 
@@ -32,7 +33,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             const response = await api.get('/cart');
             const items: CartItem[] = response.data;
             const activeItems = items.filter((item) => !item.isSavedForLater);
-            setCartCount(activeItems.length);
+            const totalQuantity = activeItems.reduce((sum, item) => sum + item.quantity, 0);
+            setCartCount(totalQuantity);
         } catch (error) {
             console.error('Failed to fetch cart count', error);
         }

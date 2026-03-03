@@ -12,7 +12,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { toast } from 'sonner';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 
+import { useSearchParams } from 'next/navigation';
+// ...
 export default function Login() {
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get('redirectTo') || undefined;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +30,7 @@ export default function Login() {
             toast.success("Welcome back!", {
                 description: "Logging you in safely...",
             });
-            login(response.data.token);
+            login(response.data.token, redirectTo);
         } catch (err: unknown) {
             const axiosError = err as AxiosError<{ message?: string }>;
             const errorMessage = axiosError.response?.data?.message || 'Invalid credentials';

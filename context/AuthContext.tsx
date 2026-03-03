@@ -14,7 +14,7 @@ interface User {
 interface AuthContextType {
     user: User | null;
     token: string | null;
-    login: (token: string) => void;
+    login: (token: string, redirectTo?: string) => void;
     logout: () => void;
     isAuthenticated: boolean;
     loading: boolean;
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return () => clearTimeout(timeout);
     }, [logout]);
 
-    const login = useCallback((newToken: string) => {
+    const login = useCallback((newToken: string, redirectTo?: string) => {
         localStorage.setItem('token', newToken);
         setToken(newToken);
         const decoded = jwtDecode<JWTPayload>(newToken);
@@ -78,7 +78,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             email: decoded.email || decoded.username || '',
             roles: decoded.roles || [],
         });
-        router.push('/admin/dashboard');
+
+        if (redirectTo) {
+            router.push(redirectTo);
+        } else {
+            // Default: if admin role exists, go to admin, else home
+            const roles = decoded.roles || [];
+            if (roles.includes('ROLE_ADMIN')) {
+                router.push('/admin/dashboard');
+            } else {
+                router.push('/');
+            }
+        }
     }, [router]);
 
     return (
