@@ -93,9 +93,11 @@ export default function AdminVendorsPage() {
                             <Users className="mr-4 h-6 w-6 text-primary" />
                             {selectedCategory.name.toUpperCase()} VENDORS
                         </CardTitle>
-                        <Button className="bg-primary hover:opacity-90 rounded-2xl h-11 font-bold px-6 text-primary-foreground">
-                            <PlusCircle className="mr-2 h-4 w-4" /> Add Vendor
-                        </Button>
+                        <Link href="/admin/vendors/new">
+                            <Button className="bg-primary hover:opacity-90 rounded-2xl h-11 font-bold px-6 text-primary-foreground">
+                                <PlusCircle className="mr-2 h-4 w-4" /> Add Vendor
+                            </Button>
+                        </Link>
                     </CardHeader>
                     <CardContent className="p-0">
                         {vendorsLoading ? (
