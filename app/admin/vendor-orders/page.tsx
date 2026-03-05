@@ -12,7 +12,8 @@ import {
     Clock,
     Filter,
     ArrowUpRight,
-    ShoppingBag
+    ShoppingBag,
+    FileText
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -57,6 +58,24 @@ export default function VendorOrdersPage() {
         }
     };
 
+    const handleDownloadInvoice = async (id: number) => {
+        try {
+            const response = await api.get(`/invoice/buyer/download?vendorOrderId=${id}`, {
+                responseType: 'blob',
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `invoice-VO-${id}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            toast.success("Invoice downloaded successfully");
+        } catch (err) {
+            toast.error("Failed to download invoice");
+        }
+    };
+
     const getStatusIcon = (status: string) => {
         switch (status) {
             case 'pending': return <Clock className="h-4 w-4" />;
@@ -77,7 +96,7 @@ export default function VendorOrdersPage() {
         }
     };
 
-    if (loading && orders.length === 0) return <div className="py-20 text-center font-black animate-pulse text-primary tracking-widest uppercase text-foreground">Fetching Global Supply Chain...</div>;
+    if (loading && orders.length === 0) return <div className="py-20 text-center font-black animate-pulse text-primary tracking-widest uppercase">Fetching Global Supply Chain...</div>;
 
     return (
         <div className="space-y-12 animate-in fade-in duration-700">
@@ -156,7 +175,7 @@ export default function VendorOrdersPage() {
                                             </div>
                                         </td>
                                         <td className="p-6 text-right">
-                                            <div className="flex justify-end gap-2 text-foreground">
+                                            <div className="flex justify-end gap-2 text-foreground items-center">
                                                 {o.status === 'pending' && (
                                                     <Button
                                                         onClick={() => handleStatusUpdate(o.id, 'approved')}
@@ -165,6 +184,13 @@ export default function VendorOrdersPage() {
                                                         APPROVE
                                                     </Button>
                                                 )}
+                                                <Button
+                                                    onClick={() => handleDownloadInvoice(o.id)}
+                                                    className="h-10 px-4 bg-purple-500/10 text-purple-500 hover:bg-purple-500 hover:text-white border-purple-500/20 rounded-xl font-black text-[10px] tracking-widest"
+                                                >
+                                                    <FileText className="mr-2 h-4 w-4" />
+                                                    INVOICE
+                                                </Button>
                                                 {o.status === 'approved' && (
                                                     <Button
                                                         onClick={() => handleStatusUpdate(o.id, 'received')}
@@ -183,7 +209,7 @@ export default function VendorOrdersPage() {
                                                     </Button>
                                                 )}
                                                 {o.status === 'received' && (
-                                                    <span className="text-[10px] font-black text-emerald-500 italic uppercase bg-emerald-500/5 px-3 py-1.5 rounded-lg border border-emerald-500/20 shadow-sm">STOCK UPDATED ✓</span>
+                                                    <span className="text-[10px] font-black text-emerald-500 italic uppercase bg-emerald-500/5 px-3 py-1.5 rounded-lg border border-emerald-500/20 shadow-sm items-center">STOCK UPDATED ✓</span>
                                                 )}
                                             </div>
                                         </td>
