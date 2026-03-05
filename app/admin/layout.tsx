@@ -110,13 +110,14 @@ export default function AdminLayout({
                     <button onClick={() => setIsSidebarOpen(true)} className={`lg:hidden p-2 text-muted-foreground hover:text-foreground ${isSidebarOpen ? 'hidden' : ''}`}>
                         <Menu className="h-6 w-6" />
                     </button>
-                    <div className="relative w-96 hidden md:block">
+                    {/* <div className="relative w-96 hidden md:block">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <input
                             placeholder="Global Search..."
                             className="w-full bg-secondary/50 border border-border rounded-xl pl-12 pr-4 h-11 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground text-foreground"
                         />
-                    </div>
+                    </div> */}
+                    <p className="text-2xl font-bold text-primary">Dashboard</p>
                     <div className="flex items-center space-x-4">
                         <ThemeToggle />
                         <Link href="/marketplace/post-ad">

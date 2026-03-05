@@ -39,7 +39,6 @@ export default function AdminSettingsPage() {
     const handleRoleUpdate = async (userId: number, newRole: string) => {
         try {
             setUpdating(userId);
-            // We simplify to single role choice for the UI, though backend supports array
             const response = await api.patch(`/admin/users/${userId}/role`, { roles: [newRole] });
             setUsers(users.map(u => u.id === userId ? { ...u, roles: response.data.roles } : u));
             toast.success("User role updated successfully");
