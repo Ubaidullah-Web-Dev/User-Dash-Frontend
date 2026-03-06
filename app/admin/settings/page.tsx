@@ -40,7 +40,7 @@ export default function AdminSettingsPage() {
         try {
             setUpdating(userId);
             const response = await api.patch(`/admin/users/${userId}/role`, { roles: [newRole] });
-            setUsers(users.map(u => u.id === userId ? { ...u, roles: response.data.roles } : u));
+            setUsers(users.map(u => u.id === userId ? { ...u, roles: response.data.user.roles } : u));
             toast.success("User role updated successfully");
         } catch (err: unknown) {
             console.error(err);
