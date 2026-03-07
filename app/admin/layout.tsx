@@ -15,7 +15,7 @@ import {
     ChevronRight,
     Search,
     PlusCircle,
-    ShoppingCart
+    ShoppingBag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -49,7 +49,7 @@ export default function AdminLayout({
         { label: 'Products', icon: Package, href: '/admin/products' },
         { label: 'Users', icon: Users, href: '/admin/users' },
         { label: 'Vendors', icon: Users, href: '/admin/vendors' },
-        { label: 'Supply Orders', icon: ShoppingCart, href: '/admin/vendor-orders' },
+        { label: 'Orders', icon: ShoppingBag, href: '/admin/orders' },
         { label: 'Settings', icon: Settings, href: '/admin/settings' },
     ];
 
