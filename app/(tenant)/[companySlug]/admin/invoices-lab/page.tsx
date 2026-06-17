@@ -104,11 +104,34 @@ export default function InvoicesLabPage() {
         try {
             const response = await api.get(`/admin/labs/invoices/${id}`);
             const invoice = response.data;
-            invoice.items = (invoice.items || []).map((item: any) => ({
-                ...item,
-                discountType: 'percent'
-            }));
+            invoice.items = (invoice.items || []).map((item: any) => {
+                // Infer discount type: if discountAmount > 0 and percentage wasn't exact, or we just want to preserve it.
+                // Since the API sends both percentage and amount, let's default to percent unless the amount is present but percentage is 0.
+                let type = 'percent';
+                if (item.discountAmount > 0 && item.discountPercentage === 0) {
+                    type = 'amount';
+                }
+                return {
+                    ...item,
+                    discountType: type
+                };
+            });
             setEditingInvoice(invoice);
+            
+            // Merge invoice's products into availableProducts to ensure they show in the dropdown even if inactive or beyond limit
+            setAvailableProducts(prev => {
+                const newProducts = [...prev];
+                invoice.items.forEach((item: any) => {
+                    if (!newProducts.find(p => p.id === item.productId)) {
+                        newProducts.push({
+                            id: item.productId,
+                            name: item.productName || `Product #${item.productId}`,
+                            price: item.price
+                        });
+                    }
+                });
+                return newProducts;
+            });
         } catch (err) {
             toast.error("Failed to fetch invoice details");
             setIsEditModalOpen(false);
