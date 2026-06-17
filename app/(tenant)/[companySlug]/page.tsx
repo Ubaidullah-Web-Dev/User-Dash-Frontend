@@ -494,7 +494,7 @@ export default function Home({ params }: { params: Promise<{ companySlug: string
               <p className="text-muted-foreground text-lg">A multidisciplinary team of innovators, dreamers, and builders.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {[
                 {
                   name: 'Ahmad Hassan',
@@ -507,12 +507,6 @@ export default function Home({ params }: { params: Promise<{ companySlug: string
                   role: 'Managing Director',
                   img: `/tenants/${companySlug}/images/managing-director.jpg`,
                   contact: '0305 6131924'
-                },
-                {
-                  name: 'Naeem Anjum',
-                  role: 'Product Specialist',
-                  img: `/tenants/${companySlug}/images/product-specialist.jpg`,
-                  contact: '0300 6530048'
                 },
               ].map((member, i) => (
                 <div key={i} className="relative aspect-3/5 rounded-2xl bg-secondary/30 border border-border/50 overflow-hidden group transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 cursor-pointer" data-aos="fade-up" data-aos-delay={i * 100}>
