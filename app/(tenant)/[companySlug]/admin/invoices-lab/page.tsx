@@ -46,6 +46,8 @@ export default function InvoicesLabPage() {
     const [availableProducts, setAvailableProducts] = useState<any[]>([]);
     const [isProductPickerOpen, setIsProductPickerOpen] = useState(false);
     const [productSearch, setProductSearch] = useState('');
+    const [pickerProducts, setPickerProducts] = useState<any[]>([]);
+    const [loadingPickerProducts, setLoadingPickerProducts] = useState(false);
 
     const fetchInvoices = async (currentPage = page, searchQuery = search) => {
         setLoading(true);
@@ -97,6 +99,34 @@ export default function InvoicesLabPage() {
         };
         fetchProducts();
     }, []);
+
+    const fetchPickerProducts = useCallback(
+        debounce(async (query: string) => {
+            setLoadingPickerProducts(true);
+            try {
+                const response = await api.get('/admin/products', {
+                    params: {
+                        search: query || undefined,
+                        limit: 50
+                    }
+                });
+                setPickerProducts(response.data.data || []);
+            } catch (err) {
+                console.error("Failed to fetch picker products", err);
+            } finally {
+                setLoadingPickerProducts(false);
+            }
+        }, 300),
+        []
+    );
+
+    useEffect(() => {
+        if (isProductPickerOpen) {
+            fetchPickerProducts(productSearch);
+        } else {
+            setPickerProducts([]);
+        }
+    }, [isProductPickerOpen, productSearch, fetchPickerProducts]);
 
     const handleEdit = async (id: number) => {
         setEditLoading(true);
@@ -151,6 +181,12 @@ export default function InvoicesLabPage() {
             discountAmount: 0,
             discountType: 'percent'
         };
+        setAvailableProducts(prev => {
+            if (!prev.find(p => p.id === product.id)) {
+                return [...prev, product];
+            }
+            return prev;
+        });
         setEditingInvoice({
             ...editingInvoice,
             items: [...editingInvoice.items, newItem]
@@ -774,9 +810,16 @@ export default function InvoicesLabPage() {
 
                             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {availableProducts
-                                        .filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase()))
-                                        .map(product => (
+                                    {loadingPickerProducts ? (
+                                        <div className="col-span-full py-12 text-center text-muted-foreground font-black uppercase text-[10px] tracking-widest italic animate-pulse">
+                                            Searching catalog...
+                                        </div>
+                                    ) : pickerProducts.length === 0 ? (
+                                        <div className="col-span-full py-12 text-center text-muted-foreground font-black uppercase text-[10px] tracking-widest italic">
+                                            No products found
+                                        </div>
+                                    ) : (
+                                        pickerProducts.map(product => (
                                             <div
                                                 key={product.id}
                                                 onClick={() => addItem(product)}
@@ -793,7 +836,8 @@ export default function InvoicesLabPage() {
                                                     <span className="font-black italic text-emerald-500">PKR {Math.round(parseFloat(product.price)).toLocaleString()}</span>
                                                 </div>
                                             </div>
-                                        ))}
+                                        ))
+                                    )}
                                 </div>
                             </div>
                         </div>
