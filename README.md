@@ -38,7 +38,7 @@ Ensure you have the following installed on your local machine:
 
 1. **Clone the repository** and navigate to the frontend folder:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Ubaidullah-Web-Dev/User-Dash-Frontend/
    cd frontend
    ```
 
